@@ -2,7 +2,11 @@
 
 [![HW4-test](https://github.com/abearab/HW4-Clustering/actions/workflows/main.yml/badge.svg)](https://github.com/abearab/HW4-Clustering/actions/workflows/main.yml)
 
-Implementation of KMeans and Silhouette Scoring
+Implementation of KMeans and Silhouette Scoring.
+
+Here I have implemented the KMeans and Silhouette Scoring algorithms from scratch using only numpy and scipy. Then I have tested the KMeans implementation 
+
+<details><summary> Click to expand</summary>
 
 # Assignment
 
@@ -175,3 +179,5 @@ Make sure to push all your code to github, ensure that your unit tests are corre
 * Extra credit (1)
   * Github actions/workflow (up to +0.5)
   * kmeans++ implementation (up to +0.5)
+
+</details>
