@@ -1,4 +1,7 @@
 # Assignment 4
+
+[![HW4-test](https://github.com/abearab/HW4-Clustering/actions/workflows/main.yml/badge.svg)](https://github.com/abearab/HW4-Clustering/actions/workflows/main.yml)
+
 Implementation of KMeans and Silhouette Scoring
 
 # Assignment
