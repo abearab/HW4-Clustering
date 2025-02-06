@@ -6,11 +6,15 @@ class KMeans:
     def __init__(self, k: int, tol: float = 1e-6, max_iter: int = 100):
         """
         In this method you should initialize whatever attributes will be required for the class.
+        
+        Implements Lloyd's Algorithm with some basic error checking.
 
-        You can also do some basic error handling.
-
-        What should happen if the user provides the wrong input or wrong type of input for the
-        argument k?
+        Given k and epsilon (tolerance), the algorithm works as follows:
+        1. Initialize m to k random values.
+        2. For each data point x, find the closest m_i.
+        3. Compute new m_i’s to be the centroid (average) of the closest points found in (2).
+        4. Compute max change in an m_i from the previous m_i.
+        5. Repeat (2) through (4) until the change in centroid is less than some epsilon.
 
         inputs:
             k: int

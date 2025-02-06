@@ -13,6 +13,10 @@ class Silhouette:
         """
         calculates the silhouette score for each of the observations
 
+        Two main ideas to quantify “goodness” of clusters. For a given point, compute:
+        a: How far is that point from other points in the same cluster (on average)?
+        b: How far is the smallest mean distance to a different cluster?
+
         The silhouette score for an observation is calculated using the following formula:
 
         s(i) = (b(i) - a(i)) / max(a(i), b(i))
@@ -32,15 +36,44 @@ class Silhouette:
             np.ndarray
                 a 1D array with the silhouette scores for each of the observations in `X`
         """
-        assert X.shape[0] == y.shape[0]
+        # Check if the input is a 2D array
+        if X.ndim != 2:
+            raise ValueError("Input data must be a 2D array.")
+        
+        # Check if the input is not empty
+        if X.shape[0] == 0:
+            raise ValueError("Input data must not be empty.")
+        
+        # Check if the labels are provided
+        if y is None:
+            raise ValueError("Labels must be provided.")
+        
+        # Check if the number of labels matches the number of samples
+        if len(y) != X.shape[0]:
+            raise ValueError("Number of labels must match number of samples.")
+        
+        # Check if the labels are valid
+        if not np.issubdtype(y.dtype, np.integer):
+            raise ValueError("Labels must be integers.")
+        
+        # Implementation of silhouette score
+        unique_labels = np.unique(y)
+        n_clusters = unique_labels.shape[0]
+        n_samples = X.shape[0]
+        
+        distances = cdist(X, X)
+        a = np.zeros(n_samples)
+        b = np.zeros(n_samples)
 
-        # calculate the distance matrix
-        dist_mat = cdist(X, X)
+        for i in range(n_clusters):
+            mask = (y == unique_labels[i])
+            a[mask] = np.mean(distances[mask][:, mask], axis=1)
+            for j in range(n_clusters):
+                if i != j:
+                    other_mask = (y == unique_labels[j])
+                    b[mask] = np.minimum(b[mask], np.mean(distances[mask][:, other_mask], axis=1))
 
-        # calculate a(i) for each observation
-        a = np.array([np.mean(dist_mat[i][y == y[i]]) for i in range(X.shape[0])])
-        # calculate b(i) for each observation
-        b = np.array([np.min([np.mean(dist_mat[i][y == j]) for j in np.unique(y) if j != y[i]]) for i in range(X.shape[0])])
-        # calculate the silhouette score for each observation
         s = (b - a) / np.maximum(a, b)
+        s[np.isnan(s)] = 0  # Handle the case where a and b are both 0
+
         return s
