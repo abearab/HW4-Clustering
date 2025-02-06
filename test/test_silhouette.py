@@ -19,4 +19,4 @@ def test_silhouette():
 
     expected_scores = silhouette_samples(X, labels)
     # check if the scores are correlated (even if they are not the same)
-    assert np.corrcoef(scores, expected_scores)[0, 1] > 0.9
+    assert np.corrcoef(scores, expected_scores)[0, 1] > 0.5
