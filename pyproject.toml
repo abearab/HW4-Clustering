@@ -17,6 +17,7 @@ numpy = "*"
 scipy = "*"
 matplotlib = "*"
 pytest = "*"
+scikit-learn = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
