@@ -44,19 +44,16 @@ def test_kmeans():
     assert kmeans._fitted == True
     assert kmeans.predict(data).shape == (6,)
 
-    # Test with high k value
+    # Test with high k value, k > number of data points
     kmeans = KMeans(k=10)
     try: 
         kmeans.fit(data)
     except ValueError as e:
         assert str(e) == "Number of clusters cannot be greater than number of data points."
-    
-    assert kmeans._fitted == True
-    assert kmeans.predict(data).shape == (6,)
 
-    # Test with high dimensionality
+    # Test with high dimensionality and high k
     high_dim_data = np.random.rand(10, 100)
-    kmeans = KMeans(k=3)
+    kmeans = KMeans(k=10)
     kmeans.fit(high_dim_data)
     assert kmeans._fitted == True
     assert kmeans.predict(high_dim_data).shape == (10,)
