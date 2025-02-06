@@ -20,7 +20,12 @@ class KMeans:
             max_iter: int
                 the maximum number of iterations before quitting model fit
         """
-
+        if not isinstance(k, int) or k <= 0:
+            raise ValueError("k must be a positive integer.")
+        self.k = k
+        self.tol = tol
+        self.max_iter = max_iter
+    
     def fit(self, mat: np.ndarray):
         """
         Fits the kmeans algorithm onto a provided 2D matrix.
@@ -36,6 +41,20 @@ class KMeans:
             mat: np.ndarray
                 A 2D matrix where the rows are observations and columns are features
         """
+        # Randomly initialize centroids
+        self._centroids = mat[np.random.choice(mat.shape[0], self.k, replace=False)]
+
+        for _ in range(self.max_iter):
+            # Compute distances from points to centroids
+            distances = cdist(mat, self._centroids)
+            # Assign clusters based on closest centroid
+            self.labels = np.argmin(distances, axis=1)
+            # Compute new centroids
+            new_centroids = np.array([mat[self.labels == i].mean(axis=0) for i in range(self.k)])
+            # Check for convergence and otherwise update centroids
+            if np.linalg.norm(new_centroids - self._centroids) < self.tol:
+                break
+            self._centroids = new_centroids
 
     def predict(self, mat: np.ndarray) -> np.ndarray:
         """
@@ -53,16 +72,40 @@ class KMeans:
             np.ndarray
                 a 1D array with the cluster label for each of the observations in `mat`
         """
+        # Check if the number of features matches
+        if mat.shape[1] != self._centroids.shape[1]:
+            raise ValueError("Input data must have the same number of features as the training data.")
+        if type(mat) != np.ndarray:
+            raise TypeError("Input data must be a numpy array.")
+        if mat.ndim != 2:
+            raise ValueError("Input data must be a 2D array.")
+        if mat.shape[0] == 0:
+            raise ValueError("Input data must not be empty.")
+        
+        # Compute distances from points to centroids
+        distances = cdist(mat, self._centroids)
+        # Assign clusters based on closest centroid
+        return np.argmin(distances, axis=1)
 
-    def get_error(self) -> float:
+
+    def get_error(self, mat: np.ndarray) -> float:
         """
         Returns the final squared-mean error of the fit model. You can either do this by storing the
         original dataset or recording it following the end of model fitting.
+
+        The "squared error" for a point P with respect to its cluster center C is 
+        the distance between P and C squared; that is, (Px - Cx)^2 + (Py - Cy)^2.
+        source: https://stackoverflow.com/questions/34710589/k-means-algorithm-working-out-squared-error
 
         outputs:
             float
                 the squared-mean error of the fit model
         """
+        distances = cdist(mat, self._centroids)
+        closest_centroids = np.argmin(distances, axis=1)
+        squared_errors = np.sum((mat - self._centroids[closest_centroids]) ** 2, axis=1)
+        return np.mean(squared_errors)
+
 
     def get_centroids(self) -> np.ndarray:
         """
@@ -72,3 +115,4 @@ class KMeans:
             np.ndarray
                 a `k x m` 2D matrix representing the cluster centroids of the fit model
         """
+        return self._centroids

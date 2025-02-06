@@ -23,7 +23,7 @@ Consider the scope of the inputs and how the different parameters of the input d
 ## API
 This implementation __must__ support a fixed and predefined API. Please consider what methods of your implementation should be public and private and denote them using the appropriate underscored style 
 
-```python3
+```python
 class SomeClass:
   
   def public_method(self):
@@ -53,7 +53,7 @@ Building up your models with this in mind will allow for easy integration of sub
 While these methods are the only ones we are _requiring_ we highly recommend you create more private methods for specific subtasks within your implementation. 
 
 ### Example Usage
-```python3
+```python
 # instantiation of model with some params
 kmeans = KMeans(*args, **kwargs)
 silhouette = Silhouette(*args, **kwargs)
@@ -98,7 +98,7 @@ It will save you a lot of work to implement `scipy.spatial`'s functions for dist
 ## Using Utility Functions
 We've built up some utility functions for you to use to test and visualize your implementation of K-Means and Silhouette scoring. There are 3 functions that you can use for these tests and you can read more about how to use them in their docstrings + usage below:
 
-```python3
+```python
 from cluster import (
   make_clusters, 
   plot_clusters, 

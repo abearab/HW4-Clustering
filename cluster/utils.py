@@ -71,6 +71,7 @@ def plot_clusters(
         plt.show()
     plt.close()
 
+
 def plot_multipanel(
         mat: np.ndarray,
         truth: np.ndarray,
@@ -114,4 +115,3 @@ def plot_multipanel(
         plt.savefig(filename)
     else:
         plt.show()
-
