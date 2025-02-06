@@ -46,6 +46,20 @@ class KMeans:
             mat: np.ndarray
                 A 2D matrix where the rows are observations and columns are features
         """
+        # Check if the model has been fitted 
+        if self._fitted:
+            raise RuntimeError("The model has already been fitted.")
+        
+        # Check if the input is a 2D numpy array
+        if not isinstance(mat, np.ndarray) or mat.ndim != 2:
+            raise ValueError("Input data must be a 2D numpy array.")
+        if mat.shape[0] == 0:
+            raise ValueError("Input data must not be empty.")
+        if mat.shape[1] == 0:
+            raise ValueError("Input data must have at least one feature.")
+        if type(mat) != np.ndarray:
+            raise TypeError("Input data must be a numpy array.")
+            
         # Randomly initialize centroids
         self._centroids = mat[np.random.choice(mat.shape[0], self.k, replace=False)]
 

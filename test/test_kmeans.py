@@ -41,4 +41,23 @@ def test_kmeans():
                      [4, 2], [4, 4], [4, 0]])
     kmeans = KMeans(k=2)
     kmeans.fit(data)
+    assert kmeans._fitted == True
     assert kmeans.predict(data).shape == (6,)
+
+    # Test with high k value
+    kmeans = KMeans(k=10)
+    kmeans.fit(data)
+    assert kmeans._fitted == True
+    assert kmeans.predict(data).shape == (6,)
+
+    # Test with high dimensionality
+    high_dim_data = np.random.rand(10, 100)
+    kmeans = KMeans(k=3)
+    kmeans.fit(high_dim_data)
+    assert kmeans._fitted == True
+    assert kmeans.predict(high_dim_data).shape == (10,)
+
+    # Test higher max_iter
+    kmeans = KMeans(k=3, max_iter=10000)
+    kmeans.fit(data)
+    assert kmeans._fitted == True
