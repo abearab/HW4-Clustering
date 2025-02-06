@@ -25,6 +25,7 @@ class KMeans:
         self.k = k
         self.tol = tol
         self.max_iter = max_iter
+        self._fitted = False
     
     def fit(self, mat: np.ndarray):
         """
@@ -56,6 +57,8 @@ class KMeans:
                 break
             self._centroids = new_centroids
 
+        self._fitted = True
+
     def predict(self, mat: np.ndarray) -> np.ndarray:
         """
         Predicts the cluster labels for a provided matrix of data points--
@@ -72,6 +75,10 @@ class KMeans:
             np.ndarray
                 a 1D array with the cluster label for each of the observations in `mat`
         """
+        # Check if the model has been fitted
+        if not self._fitted:
+            raise RuntimeError("The model has not been fitted yet.")
+        
         # Check if the number of features matches
         if mat.shape[1] != self._centroids.shape[1]:
             raise ValueError("Input data must have the same number of features as the training data.")
@@ -101,6 +108,10 @@ class KMeans:
             float
                 the squared-mean error of the fit model
         """
+        # Check if the model has been fitted
+        if not self._fitted:
+            raise RuntimeError("The model has not been fitted yet.")
+
         distances = cdist(mat, self._centroids)
         closest_centroids = np.argmin(distances, axis=1)
         squared_errors = np.sum((mat - self._centroids[closest_centroids]) ** 2, axis=1)
@@ -115,4 +126,7 @@ class KMeans:
             np.ndarray
                 a `k x m` 2D matrix representing the cluster centroids of the fit model
         """
+        # Check if the model has been fitted
+        if not self._fitted:
+            raise RuntimeError("The model has not been fitted yet.")
         return self._centroids
