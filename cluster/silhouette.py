@@ -4,7 +4,7 @@ from scipy.spatial.distance import cdist
 
 class Silhouette:
     def __init__(self):
-        """
+        """Constructor for the Silhouette class.
         inputs:
             none
         """
@@ -62,8 +62,8 @@ class Silhouette:
         n_samples = X.shape[0]
         
         distances = cdist(X, X)
-        a = np.zeros(n_samples)
-        b = np.zeros(n_samples)
+        a = np.zeros(n_samples) # average intra-cluster distance
+        b = np.full(n_samples, np.inf) # average nearest-cluster distance
 
         for i in range(n_clusters):
             mask = (y == unique_labels[i])
@@ -74,6 +74,5 @@ class Silhouette:
                     b[mask] = np.minimum(b[mask], np.mean(distances[mask][:, other_mask], axis=1))
 
         s = (b - a) / np.maximum(a, b)
-        s[np.isnan(s)] = 0  # Handle the case where a and b are both 0
 
         return s
