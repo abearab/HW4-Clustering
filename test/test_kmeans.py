@@ -46,7 +46,11 @@ def test_kmeans():
 
     # Test with high k value
     kmeans = KMeans(k=10)
-    kmeans.fit(data)
+    try: 
+        kmeans.fit(data)
+    except ValueError as e:
+        assert str(e) == "Number of clusters cannot be greater than number of data points."
+    
     assert kmeans._fitted == True
     assert kmeans.predict(data).shape == (6,)
 

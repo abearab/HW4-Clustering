@@ -59,7 +59,10 @@ class KMeans:
             raise ValueError("Input data must have at least one feature.")
         if type(mat) != np.ndarray:
             raise TypeError("Input data must be a numpy array.")
-            
+        
+        # Check if the number of clusters is greater than the number of data points
+        self._check_k_size_vs_data(mat)
+
         # Randomly initialize centroids
         self._centroids = mat[np.random.choice(mat.shape[0], self.k, replace=False)]
 
@@ -106,6 +109,9 @@ class KMeans:
             raise ValueError("Input data must be a 2D array.")
         if mat.shape[0] == 0:
             raise ValueError("Input data must not be empty.")
+
+        # Check if the number of clusters is greater than the number of data points
+        self._check_k_size_vs_data(mat)
         
         # Compute distances from points to centroids
         distances = cdist(mat, self._centroids)
@@ -148,3 +154,15 @@ class KMeans:
         if not self._fitted:
             raise RuntimeError("The model has not been fitted yet.")
         return self._centroids
+
+    def _check_k_size_vs_data(self, mat: np.ndarray):
+        """
+        Checks if the number of clusters is greater than the number of data points.
+        If so, raises a ValueError.
+
+        inputs:
+            mat: np.ndarray
+                A 2D matrix where the rows are observations and columns are features
+        """
+        if self.k > mat.shape[0]:
+            raise ValueError("Number of clusters cannot be greater than number of data points.")
