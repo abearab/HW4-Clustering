@@ -16,6 +16,7 @@ python = ">=3.11"
 numpy = "*"
 scipy = "*"
 matplotlib = "*"
+pytest = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "*"
